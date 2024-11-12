@@ -1,0 +1,182 @@
+/* Reset some default styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #242423; /* Dark gray for main text */
+    background-color: #E8EDDF; /* Light green-gray for background */
+}
+
+/* Header styling */
+header {
+    background-color: #E8EDDF; /* Match header background to body background */
+    padding: 10px 20px;
+    border-bottom: 1px solid #242423; /* Thin dark gray line at the bottom */
+}
+
+/* Remove box-shadow */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1000px;
+    margin: auto;
+    box-shadow: none;
+}
+
+/* Logo styling with vertical lines */
+.logo {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #242423; /* Dark gray for logo text */
+    position: relative;
+    padding: 0 15px;
+    margin-right: auto;
+}
+
+.logo::before,
+.logo::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: #242423; /* Dark gray for lines */
+}
+
+.logo::before {
+    left: -10px;
+}
+
+.logo::after {
+    right: -10px;
+}
+
+/* Navigation menu styling with lines around menu */
+nav ul {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    padding: 0 15px;
+}
+
+.nav-links::before,
+.nav-links::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: #242423; /* Dark gray for lines */
+}
+
+.nav-links::before {
+    left: -10px;
+}
+
+.nav-links::after {
+    right: -10px;
+}
+
+.nav-links li {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.nav-links a {
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
+    color: #242423; /* Dark gray text */
+    font-size: 16px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.nav-links a:hover {
+    background-color: #e1fff2; /* Mustard yellow for hover effect */
+    color: #333533; /* Darker gray for contrast */
+}
+
+/* Social icons styling */
+.social-icons {
+    display: flex;
+    gap: 15px;
+    margin-left: 20px;
+}
+
+.icon-link {
+    color: #242423; /* Dark gray for icons */
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.icon-link:hover {
+    color: #8b8b8b; /* Mustard yellow on hover */
+}
+
+/* Main content sections styling */
+main {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+section h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #333533; /* Darker gray for section headings */
+}
+
+section p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #242423; /* Dark gray for paragraph text */
+}
+
+/* Centered button layout */
+.main-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    height: 80vh;
+}
+
+/* Large square buttons with border and slide-up effect on hover */
+.large-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px; /* 3x the original size */
+    height: 300px; /* 3x the original size */
+    background-color: #E8EDDF; /* Match button background to page background */
+    color: #242423; /* Dark gray text */
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 20px; /* Rounded corners */
+    border: 2px solid transparent; /* Transparent border by default */
+    transition: border 0.3s ease, color 0.3s ease, transform 0.3s ease; /* Added transition for transform */
+}
+
+.large-button:hover {
+    border-color: #242423; /* Dark gray border on hover */
+    color: #333533; /* Slightly darker text color on hover */
+    transform: translateY(-10px); /* Slide the button up */
+}
