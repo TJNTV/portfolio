@@ -92,6 +92,7 @@ nav ul {
     margin: 0 10px;
 }
 
+/* Navigation menu styling */
 .nav-links a {
     font-family: 'Poppins', sans-serif;
     text-decoration: none;
@@ -99,12 +100,15 @@ nav ul {
     font-size: 16px;
     padding: 6px 12px;
     border-radius: 4px;
-    transition: background 0.3s ease;
+    transition: background 0.3s ease, border 0.3s ease, transform 0.3s ease;
+    border: 2px solid transparent; /* Default transparent border */
 }
 
 .nav-links a:hover {
-    background-color: #e1fff2; /* Mustard yellow for hover effect */
-    color: #333533; /* Darker gray for contrast */
+    border: 2px solid #242423; /* Black border on hover */
+    background-color: transparent; /* Keep the background transparent */
+    transform: translateY(-2px); /* Slight lift effect */
+    color: #242423; /* Keep text color the same */
 }
 
 /* Social icons styling */
@@ -179,4 +183,35 @@ section p {
     border-color: #242423; /* Dark gray border on hover */
     color: #333533; /* Slightly darker text color on hover */
     transform: translateY(-10px); /* Slide the button up */
+}
+
+/* Mobile view adjustments */
+@media (max-width: 768px) {
+    .nav-links { 
+        display: none; /* Hide the menu buttons */
+    }
+
+    /* Remove vertical lines around the name */
+    .logo::before, .logo::after {
+        display: none;
+    }
+
+    /* Center-align the logo and icons in the header on mobile */
+    .header-container {
+        justify-content: space-between;
+    }
+}
+
+/* Make buttons stack vertically in mobile view */
+@media (max-width: 768px) {
+    .main-buttons {
+        flex-direction: column; /* Stack buttons vertically */
+        align-items: center; /* Center-align buttons */
+        gap: 15px; /* Add space between buttons */
+    }
+
+    .main-buttons a {
+        width: 80%; /* Adjust button width for better fit */
+        text-align: center; /* Center-align text in buttons */
+    }
 }
