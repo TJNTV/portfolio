@@ -239,7 +239,7 @@
   .scrawl { pointer-events: none; }
   .scrawl text { font-family: "Caveat", "Segoe Script", "Bradley Hand", cursive; font-size: 13px; font-weight: 600; fill: #247d70; opacity: .9; }
   .scrawl path { fill: none; stroke: #247d70; stroke-width: 1.1; stroke-linecap: round; opacity: .7; }
-  .hit { fill: rgba(0,0,0,0); }
+  .hit { fill: rgba(0,0,0,0); cursor: pointer; }
   #files { touch-action: pan-y; }
   @media (max-width: 760px) { .fbox { grid-template-columns: 1fr; gap: 20px; } .fbox .lt, .fbox .rt { text-align: center; } .fbox svg { max-width: 300px; margin: 0 auto; } }
 
@@ -638,80 +638,30 @@
       setText(idx < 0 ? idle : info[idx]);
       kick();
     }
+    let pinned = -1, hovered = -1;
+    const refresh = () => choose(hovered >= 0 ? hovered : pinned);
     function over(e) {
       const el = document.elementFromPoint(e.clientX, e.clientY);
       const h = el && el.closest ? el.closest('.hit') : null;
       clearTimeout(leaveT);
-      if (h) choose(+h.dataset.i);
-      else leaveT = setTimeout(() => choose(-1), 140);
+      if (h) { hovered = +h.dataset.i; refresh(); }
+      else leaveT = setTimeout(() => { hovered = -1; refresh(); }, 140);
     }
-    // click the handle: angry eyes peek out of the hole, blink, then sink back
-    const eyes = $('.eyes', svg), hh = $('.hh', svg), hole = $('#crack');
-    let eyeT = 0, peeks = 0, busy = false;
-    // fifth press: the box grows ant legs, the wall cracks, and it stomps off the side of the screen
-    function walkOff() {
-      busy = true;
-      clearTimeout(eyeT);
-      eyes.classList.remove('show', 'still');
-      eyes.classList.add('angry', 'stay');
-      svg.style.pointerEvents = 'none';
-      if (reduce) { setTimeout(() => { svg.style.visibility = 'hidden'; goLive(); }, 1400); return; }
-      svg.classList.add('rumble');
-      setTimeout(() => { svg.classList.remove('rumble'); svg.classList.add('legs-out'); }, 800);
-      setTimeout(() => {
-        svg.classList.add('walking');
-        const r = svg.getBoundingClientRect();
-        const dx = -(r.right + 60);
-        svg.animate([{ transform: 'translateX(0)' }, { transform: `translateX(${dx}px)` }], { duration: 4600, easing: 'cubic-bezier(.5,0,.9,.7)', fill: 'forwards' })
-          .onfinish = () => { svg.style.visibility = 'hidden'; svg.classList.remove('walking'); goLive(); };
-      }, 1700);
-    }
-    function peek() {
-      if (busy) return;
-      clearTimeout(eyeT);
-      peeks++;
-      if (peeks >= 5) { walkOff(); return; }
-      eyes.classList.toggle('angry', peeks >= 3);
-      eyes.classList.remove('show', 'still');
-      void eyes.getBoundingClientRect();
-      if (reduce) { eyes.classList.add('still'); eyeT = setTimeout(() => eyes.classList.remove('still'), 2600); }
-      else { eyes.classList.add('show'); eyeT = setTimeout(() => eyes.classList.remove('show'), 2500); }
-    }
-    // the revealed hole: click it to zoom in, fade to black and arrive at the desk
-    let diving = false;
-    function goLive() {
-      hole.classList.add('live');
-      hole.setAttribute('role', 'button');
-      hole.setAttribute('aria-label', 'Climb into the hole');
-      hole.tabIndex = 0;
-    }
-    function dive() {
-      if (diving || !hole.classList.contains('live')) return;
-      diving = true;
-      const view = views.home, black = $('#blackout'), docEl = document.documentElement;
-      const hr = hole.getBoundingClientRect(), vr = view.getBoundingClientRect();
-      view.style.transformOrigin = `${hr.left + hr.width / 2 - vr.left}px ${hr.top + hr.height / 2 - vr.top}px`;
-      docEl.style.overflow = 'hidden';
-      const dur = reduce ? 200 : 1150;
-      view.animate([{ transform: 'scale(1)' }, { transform: reduce ? 'scale(1)' : 'scale(24)' }], { duration: dur, easing: 'cubic-bezier(.55,0,.9,.35)', fill: 'forwards' });
-      black.animate([{ opacity: 0 }, { opacity: 0, offset: .45 }, { opacity: 1 }], { duration: dur, fill: 'forwards' }).onfinish = () => {
-        go('desk');
-        view.getAnimations().forEach(a => a.cancel());
-        view.style.transformOrigin = '';
-        docEl.style.overflow = '';
-        black.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 900, easing: 'ease-out', fill: 'forwards' }).onfinish = () => { black.getAnimations().forEach(a => a.cancel()); diving = false; };
-      };
-    }
-    hole.addEventListener('mousedown', e => e.preventDefault());
-    hole.addEventListener('click', dive);
-    hole.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dive(); } });
-
-    hh.addEventListener('mousedown', e => e.preventDefault());
-    hh.addEventListener('click', peek);
-    hh.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); peek(); } });
     svg.addEventListener('pointermove', over);
     svg.addEventListener('pointerdown', over);
-    svg.addEventListener('pointerleave', () => { clearTimeout(leaveT); leaveT = setTimeout(() => choose(-1), 140); });
+    svg.addEventListener('pointerleave', () => { clearTimeout(leaveT); leaveT = setTimeout(() => { hovered = -1; refresh(); }, 140); });
+    // click a folder to keep it open with its text showing; click anywhere else to put it away
+    svg.addEventListener('click', e => {
+      const h = e.target.closest && e.target.closest('.hit');
+      if (!h) return;
+      const i = +h.dataset.i;
+      pinned = pinned === i ? -1 : i;
+      refresh();
+    });
+    document.addEventListener('click', e => {
+      if (e.target.closest && e.target.closest('#files .hit')) return;
+      if (pinned >= 0) { pinned = -1; refresh(); }
+    });
   })();
 
   // a long, textured 3D pencil: grab it anywhere to drag and spin it, throw it and it slides to a stop inside the page
