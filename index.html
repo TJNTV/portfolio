@@ -196,6 +196,20 @@
   .nb .cv { position: absolute; left: 0; transform-origin: 0 50%; transform-style: preserve-3d; }
   .nb .cvf { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; filter: brightness(var(--b, 1)); background-size: 100% 100%; background-repeat: no-repeat; }
   .nb .cvb { transform: rotateY(180deg); }
+  .stk { position: absolute; left: 0; top: 0; height: 40px; perspective: 700px; pointer-events: none; will-change: transform; user-select: none; -webkit-user-select: none; }
+  .stk .s3d { position: absolute; top: 20px; transform-style: preserve-3d; transform-origin: 0 0; transition: translate .2s ease, scale .2s ease; }
+  .stk.lifted .s3d { translate: 0 -5px; scale: 1.07; }
+  .sf { position: absolute; filter: brightness(var(--b, 1)); }
+  .sf.pn-clear { background: linear-gradient(180deg, rgba(255,255,255,.4), rgba(255,255,255,.07) 45%, rgba(30,30,30,.2)); box-shadow: inset 0 0 0 .6px rgba(255,255,255,.45); }
+  .sf.pn-ink { background: linear-gradient(180deg, #4a4a4a, #060606 55%, #262626); }
+  .sf.pn-tail { background: linear-gradient(180deg, #b7bbc0, #44484d); }
+  .sf.pn-tube { background: linear-gradient(180deg, rgba(255,255,255,.4), rgba(255,255,255,.08)); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.4); }
+  .sf.pn-gold { backface-visibility: hidden; background: linear-gradient(180deg, #f6d97f, #cf9b2c 52%, #7a5612); }
+  .sf.pn-cap { backface-visibility: hidden; background: linear-gradient(180deg, #3b3b3b, #0d0d0d 50%, #232323); }
+  .sf.pn-band { backface-visibility: hidden; background: linear-gradient(180deg, #4a4a4a, #151515); }
+  .sf.pn-clip { backface-visibility: hidden; background: linear-gradient(180deg, #4d4d4d, #0a0a0a); border-radius: 2px; }
+  .sshadow { position: absolute; left: 0; top: 0; height: 40px; pointer-events: none; will-change: transform; }
+  .sshadow i { position: absolute; left: 6px; right: 6px; top: 15px; height: 9px; border-radius: 99px; background: rgba(0,0,0,.55); filter: blur(4px); }
   .scis { position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 2; filter: drop-shadow(5px 8px 4px rgba(0,0,0,.6)); transition: filter .25s ease, scale .25s ease; will-change: transform; }
   .scis.lifted { scale: 1.05; filter: drop-shadow(14px 20px 10px rgba(0,0,0,.5)); }
   .scis .sb { position: absolute; left: -219.6px; top: -77.7px; width: 440px; height: auto; max-width: none; transform-origin: 219.6px 77.7px; pointer-events: none; user-select: none; -webkit-user-select: none; }
@@ -282,6 +296,12 @@
   /* ---------- Footer ---------- */
   .foot { border-top: 1px solid var(--line); }
   .foot-in { display: flex; align-items: center; justify-content: space-between; gap: 20px; max-width: 1240px; margin: 0 auto; padding: 28px 56px; font-size: 14px; color: var(--muted); letter-spacing: -.01em; }
+  .foot-r { display: flex; align-items: center; gap: 2px; }
+  .foot-r .loc { margin-left: 12px; }
+  .ib { display: inline-grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; background: none; color: var(--muted); cursor: pointer; text-decoration: none; transition: color .3s ease; -webkit-tap-highlight-color: transparent; }
+  .ib:hover { color: var(--ink); }
+  .ib svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  @media (max-width: 700px) { .foot-r { gap: 0; } .foot-r .loc { margin-left: 8px; } .ib { width: 34px; height: 34px; } }
   .foot-logo { width: 30px; height: 30px; display: block; mix-blend-mode: multiply; }
   :root[data-theme="dark"] .foot-logo { filter: invert(1); mix-blend-mode: screen; }
 
@@ -381,7 +401,7 @@
   <footer class="foot">
     <div class="foot-in">
       <img class="foot-logo" alt="Toby Nash" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAAAAAB3tzPbAAAr90lEQVR42u19Z3hU1dr2vdbeM5NkWioQeu+9d0R6FVCwgAgoWFEsKJZjQxQLBxtyBAVRRMCuiEgRpffeIZRQQkIqqZPZa93fj0RFksCEBL/zXteZX8kkM3s9vT9LEP+3XxL/A+B/APwPgP/TL/OfeIimEOI6fbe47mpUQQoA+joRu1QBoAYh5KXI1kIAR+KDGzmgjP9yADSNy34AtYHV3+08nGDU6Px4Xf0XDUgSQsj/IgBIiZRV+8z0Th3C8vAOEGLfxGUADGpET7v9Dwj+ArXkfFVaAFDg4IffnwSACh3u6wotAWWoKdNThY1+QBp+TJ+gjPzjx59fr1zeZtWgZckxVxovTb4cDJgCQgIYl0C/ZTFtOGAAqNmlLWBIx3r6qSxy38PlHQDgGbWGqoRPLh0AtE7uBxhAcHQQbDaB2rEkVzaAadjMvgtXDDy7OFgYqJ5AP3nyySAANodNAuZUWv8NAPj5BEwhKrneyDxXH4CJWl+uHmHCANCQfAt3cSEMA13P8siEMMDIU1TSFJhXQhqURAbyNAkAy7ZoJKHu/ndy+YRzmVtT3/ZRAYBJ0bpjzwppYZtvSAidMteAqlhvfRYMAMG1mpzZlAFJ9/aaJZODa2ebS2ifVgUSCDvKFA9yeASANG0OAWA+/RXxJTNc4afrwjQA2EwAuM/iXagbDBPT6C8JBa7ZlVCGkXvouCO6jBEiDzx/yuYfFHxIZgc/GWkm15x2cHWMBtCx80IbzBv2tc5xDm9QcU2Xg5ACfjjGu5c+YqBir1kPLpEiBiKPlrw2s3CNgCteeLW+HZCRkVXrCkgD/ZVObDGTfLzyLnKU7DT44bJ9fMmre89jdmLjN8kfB/wy3gWByHER3U7oPZ1fITdVlSba+/1/0NLS/5gQK35VGYCEAADDhES0xVkYRnbFj/RXxx6m2ZxnuBgdyTl4mnwHuxnfUCxIZ/dKa/gzJpP/hmHgBpKJu79ftWXpaVL/Q0KsjPfHw1CmhobND8D5dt2Q5NhbPuu5wVcp9fZVlbLPdp3VYX/Zxl/fuq3J9pX35jRa5+sTW35xI5nQ/vneN4jzr470tTu9ofvCSdls+NzZzb/HA0D4o/dFUvwTLKT4M6S0NUS1Pd/UQr2xb1bFbLIJtnM5Qnz8FR3JmXidvBMTycqYSV8UchmLfuQi1CcfwdNUzbGQN4h8IZSmYQCNYnVxaWC8eA1iIzMHppisv/TkwHate18c379Nk+ChWqW1uu23Nsf6dzvpXvdE2AnR6IGcc/UvTErJLltlXJDN37Hb8Uq+YdW21El/wJkTGvWvU0FpvDej6kJtGKahBTQp7HG2HkpefwpY/AgGgE08KiJ38x3UyOXxiqMtzsBccqx7sZXdABuZ2LAjmRDdmfy6+hryw6DPqAdjN3XLZorrPLeT37in/Cso3ydrMTAUpuxqFZcE16K5JBYKXXlg1QhUGFhDoZ69nIGL508Y8OAEYKYrI6iF14tgddGHk/F1gPKmBNxmMCyzXCp8F3fGISu9IrDXqvTyidHBr80/dD+/+f4LofX28/+ADGiejQLqJGYeHPgDub/t3MOxR55OOJq65L4T6y8MGOHbteXeuTmnNg1a5otf1XLZoazN47M0330wM0bfM56Jp+744tSy9R12HeCnvWNPWQ8tvngk945pab8eGzjQA4SeK64iugYALL0eEtjDOehFvov7yGH4kiyPZdyFiCxORqUsPoAm5E2YQVbFXB4EEvktIi9yJlqQD+Izsjx28Dywi79CpnAO+kYDzuPFdY2Kp0YJCli2B2Ya8p1eO5r82MuUVT7oH5ZzNK7n9pYrRYdVPb5OfXZJ7aXNmh6tsqBn8NLotS+sd589/NSZ4BW2VovGfn2DbfXQd/qG5JTb0WN99P7MMXGe2VlPnaz4n7K3bauxNbrneXh3V9ESBMT1YKE/vJ8DIRIN2AZzeTREbGBSpUbkFnQnR+Mt8i58RzbFGrI+srkKzmxOxxByON6ivzJ+Y7ITB3gSjcmDrpfJj+Vq8ikc4QpIVEyy8sRYWwGa5WL4QloaOjMukvvuy7Jbo9AoqXt2zceWeCCcHYHGtWsho9lvjYFuue0vBPX2hiKNg4PgD2+bg3odXgC67ekG8/6DreBqElYR/naDwFNRtSyzbOUgYNcdtXKVqZFtMwCk5UYKAwFGa8Xxfp5qUdlRNhIwENWl2cG0rQ3eYjY//MHPFQNPnOHMWrlp2W/PIg9EP0Me6j81M2vxvUdOZ93T+HdmD7o7I8N35wByZ4cXfPpAj2/J2a12+ayBgzMzTrT9l+LmOh83hjR6jBrZqXP1iKadH/4lMMcCgZ9/de08kA2JHu/D2M5PUN3POZhG/hv7yRs9scwNaUz+jFHkYrxCjsQZsire5TaUTeWeqtX8XIUh5HiMoaqEVcyqiRjukD3Itd7/jBO2S1Hb7WQgAh2oECu5YlC2PRew+SHa1n0iKVoueORgqLGow9k79p8vG9dhbVXhyJ3fL4zO7wfsahAv6v9wy/uV2m29+ZVatbbe9U4X5Sm7aLgrfesvk35uLhwVNnt/q1kzqfPTPRuctL96Xz1XyqIRtsgXX4I0BZRlCFBQNf01NABhDjToZSvY0Wr+ENRZsnU07iDvwrNkF6zhCROx/AVNyQdQieyK56kdnlyeRLDFowhSnIrR5DC8Td6CQ9SiDvk96pDvoit5E54i78I0WlXD2wIAgv7Ien4VQMAcoC+k5YL37Lm3fG3r63q7ZnRU2s12ty9x0rmoRNu4lCD/DZ3ON9v1cPi5TpEjYVVNGG3XqY0GbvAc693qx3In7ojcUvXkw0ZmkvepTSmhznGHckXjG/e0rNSvclrQqsFd/GViJ4WkRldqbkTkjHqpYU/zxucGDDp3W8u9fomyfQLwFAK1vm0gK6e9jv8wvWzkFm5HH3INHiFXuu4gh4vPmVIRB5kZGXmOsZ4u5C+4gxyHSWQbvMvTrvJp3IfwLLUKg8jXbW+Qg6OOJ6f3q3mIyU1uIJebW8lP264j37Gt5v4QuzTQMwAxDswX0iLumNC3eX4XbWBWTRRIa+AFwptoINvqCjSqH5pzMbR5KE4ny0SklymjENRxNJACC8y0VYGjWVgyIlr2DZZRN40B1vsrA/ulI8yVne5E+u5qQJ2GXwEZm3KB5LphqF03F4AViD0L0P/8GdLsMv/IsqRR89NXHxv1q8UvO/3i941/1jqeveBtWlazyX7/uptfWZfwSdfT2Zw6NoN86LPMX9Pvf3b/1r3DvqR/7wvb/fzsmSxywZ1nl8U+8ePB/SfvXJmZtKff4R0XF/bPyUn/8F/xG7jsZZ8/o9+i2DuFDb0DcE0DBeB7IU10INfgbvJBjCfH43Umo3oa1yI8LS+IeQr9yM54nb4IrOBh4DQXoRc5GO3JnhhEfxB+4iEgjpswkHwZfcg3Qt8ne+EkWQHZTAJiOB21eTscYnypCTHl7i8lhs5NXt7eHHRh14CcxzJO9w2a+G898bGwo5XcI5rG1M+ZsnvLiBrTVmQOixo3t0qtcg99H920uXdTx4SxtXIqVXry7M76GXW9p6q2HA2nvr1rrGffhLQ1g6JGVkrs8Wg7//HBvVosK9d6VK2tobmP1f6lpfF42BdHpXq4cWkJscWlsOF9tsYUsi/20GqD85yGmuROvEj+Kr9lShB28bQt6Dh3oS85G/3JpviE2b097zHBhgtcgYrkojL/IRfJZ8la+JBWP/cpndG+JrkLPcn5GEu2wFpeqGwaiI4LQIgD9YUMEBdx17k+5yMerBAGQ4wLR6NOg4Gwrl2Ava7m2jZpZTWk1MpOrlC2zUB/clqVykBPf23sPD6mO6NGXgyzGrZsBNSqYwfSm9+eKdtU64vshDYhwlH2Nmhbxa5AVpd+Wg4PrQodekagUTlLCFytOBWQEs21lkGK6AHZceuix5Arbpifw8+HnNF8oEM2kweNOHdsW8MP6P/tyd1Zma83WZ/L+8sdSrMeud/KOta9SzK/6/Q1OaHRp7m5L/c8Tr7UP0UdbHRXZsbm/mstfjVmLzm9eUwcJ/Q5z/i2r5AJXSfHhQPNsvLJX0IhVhbJV2HYUEdxCvoqfoR7yNbYTraLTOVxVMzlHs9M8h5MIXviLaZUxn7Goxq5E4PI1zCRvB3Pk51wkCoIiVyIKuT3mE4OxldUoThO3oCl3Imq5Czcw3Yw0GjsvCP7MnlFl+jqvpCW8O9f/G6W8D47WM8ae7p+uXWtNjTYGFFxX7vl1WrrkMXtj9Y9O+f99LL74zsfbjQzvNnm2z5qWeFA94mjd5cVX05c1eV47Ng5vX8N6baj62e6d1zl2x/Jutj2p2YH256o3XRf9UO6TlztpVEXRJ9Z7dzbun4xYHXDwwcf+qXvihkbbBYBl6r45D24Urbo6jZ4030NbIAN3chbMZ58BKe5GyKBn6IbORF9yLp4kbnVcICHYcvmLowjv8JUsgaeZ1YIfuMZYAX3wenj8xhC3ox7yFrmabIKLjIjeAS5D/3J4RjJXAfW8wRQCbDZDQDocfQKwnw1Narlq3duvQBDWK3nnnBVOPPvTHvcLZ3iq5y6rVdamdPjgmMrH3jezDDNp7Q7rHGPLP/SZ9utjTx+TzWesk3K8sta95/Qp9uPOBxqqMezHb8+3j4uKfW+2rnOGuP3esrFjUnNzu53o3Yc79MwwXloTL2joSffDsmNqnDv3rIDm0wN2putKGHKYytvCy7aJl8tCngD0gCAW88nOppc8O8KHUV+FPYR+W30ArK77bDKrlQxlzsrzCRXRz2dwcfxLdWMhsuYVbvfCXXY7EkuwkO0XiyzKpsTHCvo694tizswgv6Y0DHkVy12+nIfC11Mjg7ZkrOzVgfFo/YB5Kz7p392RwgA2PBy0WIgr4L/o5MN4NEZYeWmlvWXP2o3L/ICsDY7CdgcXA3wOoJlwsV+tl2Tz74yKy3NF+XENmjI905X+qTdkZ+q1+jt7QSkVKA2amadCEJw9b2fjFm5JQWOyuHKPO7vBaRu32u3nZQmcraHRTounoqUSAjtBJyf2WvE5yPK/doJWkw7IfU1UcDiFJj2lx5ZdOjk6bHpCXsXvXwkIWXDfzLP8O3+D0+68N6s5KNbO03ISBgtYArUWpvtn/pm+hbe+X7K2l6AzZSA474ZPZJSOaFbTlzWZ3szh0cApr3nj8npvlvGxsRlP/w4s3OGvpCdmNbjg6ykM5N3nPPPGnw6SX/1ZuYOrp6Zep6TIIF1RSpTXIWDugjcMBv1yfswh2yMjxgHpPB8EIAoDCan4vatNSEB2OHcmoHqiotx02c1YJN5BhDASp4DzvIgyjYCJCCAHn7WxZdMQMU3llxAeXIRKpCzMZ0XvfiCPidOcSvqZXMBbJCi6NDmKkIs5p3Ejc9UGZO6puYtg9alDqo1Zm5kw+5NV6R8DkNmyHZBq++Jj3vhgsMSnZzxtpwfb2s+JPyHdqGpk1PsfvQa1lacgk24Ru2Krp2w+0LUtmMJNm2UyaIpj/3auXmHUb+F5q5cseDmYbfqlUP8XXwHmkWN/bZKxxZ3zYlq267D5nKut8I2taz+e67gPTWKZParaNFWMMt/RjbAMq5AmWx+gkrkcLQpAyMPvZ3KQZqovZypg2BH1eU5AzCiPgwTNb4k6Z9nhwE3+pxd74LTMGxo83vixh4QJiJeXPUSIj3CIR4hG2MNeQOyuBotcrkKvcjRuJccik8XwLhSwu5qLHQTTPxKvtQ5UR+t2ob8rdwzOmdm0w8rw9YnCsK0AwIYHUfFnE6wAxWkBGzAgFgqy0/+VBY2CNgddgMGcG8WST4D2AFAAELavr+QMal5DK0eN5Gx/Qfl5KyLnEK+N3IB+U7n1TfCJtoVneXCVeq/78CQS2euJT9uNSc56cWhe89wfIuzKiYY2HG8Sx6bd/mGtKh4vitgg2HYgNC383wYncuVFQDDJoQhgbDXSEtbmvPCIew2myGFgb6by3VX6nDPJ9J9Hw2LoX60zsEzavIYRd/QYeSCIGngzaIdoqtRYJuQeNLWj3wd88iu+Iz+BljCxTDE78zZ+OKYu57eQGpNUjFnYhQAwDl6L5X6Q5Edvzc0j1vDbz9AlZc35M5htj/c3HmbEZ7M5/AI2QXvks2wjuyCWB5EY+bWhinCzxVtB67sC1EkNjqP57qErz/z3A/DZ0V0+nXgtIEhx/osnb9Q6A1t/vB08zuBKHDs28NpZseetS5pDtISMb8cO2NWqNetyp/ZQmVg0/oYf6Pdcwzd89UjjYNi7JsfWRlf63SHD7tXPdfgq3b+kCqTGpZve/rdz3OlmvrUFXqNrmwHrPTyQG/SxHmeh9PPyahLvg9IlD1JpSylrL+Qo//4UV2KsL9+ueRtlcfUr8IwMYashS08CJzndIRbXIDh5CSMIOtBSlRMuUJsbF6xAcvAL3GmVT8u98GIslvqTApXB1re32OTWbGHbSlCvAViDSE0IXBZxVoi711c+raEJpSRK6S/50tZ1l1nWiRXfKFS5PmRuysnnrg9riPQ7tZJK0OHT/ZLfXvolZq9rthCc+SJEGHIp2rdRi7HY+SrWE+Wxzm2BVqoa6jqXq4jZsOO5zNbttb8JuwZ8knPQrIX1jOtY98knkSrQw4Y+Nnv09eQF6LIfK3DW1mmeqjrSR+wumIHYG9ZV7buXid4+SZTtJe6pJ2IEh09lvjgl7QDp7G/TAPAsEvAE1Yewd6lBqKrNvFLANmmXahi+0JaZQwBHECNB0/HnHtsWEqK77FHL8SdaPsVrT1lZGCJy6unvEfCjkr3fv5Mv/RMvvQUE323Dos/cXxhbOqhxYO3HT/5rF0KlH9qo7/IyBJFf/cw2AWqvd0ek6kcOM1DqEj2QkueaQo7OmRqXXIA9G4nbIAT2MhY4BiT0J2ch67ka7iPrJsfBzSdElNEuQBF+qFfwwbx6KKzG2enbjn92fTENfrLvRuG9Xln4/r6sMG1ucTNYnloWlIOhg3CiHwgdvoHJ39K2JkYc5S7jzCVK5I//O3QeLc0DBOA583CZQ5F5tO7CMPxk98uYrgNbciJeJmsg1c3DQDsCPmsFBgoD1Hb2iOvhWsY+QRGkl2wihwddoTnEObnawAg7SYwIkfpgAHQ1C2AW5lZ/55MxlR/itaGSm9lXpwSFQYYEt5vSgX/eRConx+oBkgTX+ds67+GnNE1nuxXI5WZNQeRu8rd3tUNQJj4oTCkFQmAagL06vdsKhcPjEnNeaid78LBBq3XRsMUwNBdpYT/PC4iU94tAyFC6p0hX/wXGdvzA52xccj38dnz+m2J5xtlJzwAGLJ1TiFiVzQLdYIBdCDvx3f01/HEcAMQBQPO/qtYavjPq95a5DqnkHDv5x70Jw8a75PT8Qk5HJ+S1bGdb0HCdqiQ56JIGzNV2OSEjLnbj78R+8aStKSLY77ddadhYMC+S1yGUqOCxRYwxC9Ms/bG7lzMpfqnBelLL3700/YZ2a/M27p++7QDEZBYUQjhi9ZCy2Gi0zLYErkK9cnFGMIpQlRKoVXaxyc1k+pB2BK+tB0h2+BnZnpxgq8j0uJ4VCJ7oW95iEIj46JCSskK607YTuQM79gnvmFW3xaZqa5p8s2jGDXYb5b+KADFwel+ETK0TE5vp/CGj1PBtiZDj7ZJ6t85s8quByqmNq52YL+kvL98IemhorXDShjSu5Ivl1tO3l0vhae62Uw8rf0s/ZfFGZAGOpCZXSeTe+t+QM6yTyE/qrHQSq/r3bTILgzROKcQS1CkL2ToLu2UmfYl5iZFAStzNHxb/EDV6zSKEQcBEQwc2XQQOH0kGUh1NwB+i8kxbIl66q25AF9yKFEMb9RSXxmGjHjldEzi3a+fTTvQd9FhlxBflqICvVSVPgw7nrmw8d/n47hx0rmTasl8nvc98+TOjRfvXb5pfltIAyML1X24gq97LAQGgjO4EDXIu/H6mWCUOUN9XVjoITgwlXfjF3IgvmM8cJ6rgFOch16cASnRJkMXz5XgugYwRZONqSvPvbsuMW7N/f4XgVrp1wmA6bBjUOyhCfGrcla8knr0zI/fckvSrJ94LPP3w+c6ChP1LhTLmdPko3YYBubzaRwi67qTGBNp4AEqXhcAvoYUiDzBTRhKxhj9yQ8xjRyBb5lTHdLA3fQVI6Ah0odNzzWUenw4O1RIS8xp1TAo5e1EIW/HdZl6kuhRmwZMB+r2U0Roje5AZM3Bfl+9/r5jjv7hQovP/2PXgQc0ig/DZqDO/PQeXS+krKkwhtY3FYNM3K+uCwFIxZdhwDuh3Ury6UF7k5OG3ZySlNR1GPlbjec4HaZA0G+BC7FmfJQh4drOJGALv8RQ8nHYRPhuXi8A9JmakIBtMdkNK3k2Cnu5BN4Evmf0o2oDQ6LyWR2oO21xFSRejNky6Od53/4+Me3H40e/qWyYctH1Oj9p8TOYhlH/5Py42A1py07FrdafHp67Z+cH8cdTF3+7ORTCwD2F+WBFADBX2PANR6JnnjfK+oCB+66LDfiTBoNhCkSgseJPuJl8ETduPNQK6+j34sjaEGGImj7qQAH4BjaM2vVNq5Onj37dfs+Od0wDuF9b+voBoHV8C5gCEg+ti39i0Q/9hAEAjomrkle/ri48A0M4dwbqTltcL4SAuTfnVHQtn14rIeCdQX0dz08qxveDNIUAqo5pDQAibzyhxitnX3N18ELix0Ddac2cRsIQwYe4Fr38/Ah2EbqD6rqen1T0PZA3TQFAGkIY0pDSkIBNoIsTQvxWCACF2gGhHMMoaP99ZOKhb79/Ik6QLZqp6zZR+4cx0PYZ3/eWyhLCMIQClFZaK2GYftqOZiG/phCYHdCxEULAjq5U5REEAy8qi9f9pTW59u1y0mEAdk/lwV0HdK0qkDcfKySqXmTAMbHFjyGlqHn+x10rBgfBwBz6+Q+8LE2+DqDxlOV7T5DUCesnVcubO5fGTAaqRknt40PSRM059spJW4Ig8T0t/iMvy5/973EzU/MdMpJMeTMMhjAxodAjoChfLmdZRQgAwlXVAJz7r58NK6IyoRQ1tVYWeXwAXE5bs0QGaokVMz5o6QkxIPKHHlElhfqfOru2/t65ri1eHGJzu3FjigpMBhQTe8AIcYWYhiEN05A21Ez+5wAoTCKzugiPF88HZgcUd9UxPG63+w+t5fTgRv//x/OTiqfqmR5n2I6C3pBZSIPH8Vti3Fpmm/UrtgxVcacPHjVgNwvGARrX2zL8ZSJU5RfvVGbK08uubge0ynkAXlcIOnyVkPfO2wjD0IIcpEmqaySMVsV1qyw+KN1u+7ICTCQLEmDeB16lHc8vuTmKytK5pCSMgpGY2HwsQ5pCKV3MII1KCWkUk3iCEyP8MndGwQMXMIbpzUy3G+//MVtqcYEMxZOXQ674plG2xt0fnSZJf+BukrYUyaRTPxY3O6DUM8ITHBFzuTpHAVJ9Yng8uM3v/7PS/gXC8ERBAN5zAED4nTN3puXpbR3g6ZPXTm4agbeKaRktbnU63eY3l3+sAAX8faXHGbz2z//LA2B0ATumuW1kfgtBq3fWnStQ3i6M70nGLZxYBQDk+8U17TqnswzDPVcBQPGoJ9iDW/46r5/zEIZxBR+nyNNTaiGvpS7y5plb0q5QNsg7fcayGd3yNuq0XVlsu6J4P8Jw51VYyOIs4fHIuX+d189PEVZQBvIRnvBxh/y+IYhKQ48VcSptkfRveLpO3ggRGn2aW3y7aPED6TUbX+6RFgDgQYTaqyb89V8WP0I4phVKcOUns7ZNrmHkNdOgwtqiaJC1b2oLE4AUkB2+uUj6/MVXpF8a7qCyl482XWbIpHVA0F8h/NJWWUNonC20lYImENwi4VBCOhQEbGf/tdwsLPnvf29OTA5gkETUlLHIj02sYurSVCV1SMhlJQLzsmepTClYxbi0i6CWg/AWkrwTBtITDy79bf+fbxlnlK1glzD9E98FDObtmsh45evEiPr7W1av19ZE8QbQqxuUOdmXfehyjOUmS+CGS6YABcKDVCHBnMDZjQfnnM8BhNCAFAp+PBdUWF+J/YKw+VX+L9mxscByrADa9B9doVgQHKDQIcFXpACQmyUJ12UbAKwCdphi6bTdSQCk1JpCKo0Q78AhPWEUMv0Rv1rSgGbelwhJISioN2/+dm1w4BAI7CR0cMhVdmy5G64MQcLfoHTacpB2ub9xbHQCpNTUWpqKCrUH3lMm7O/Uzaei0BGtflT50gQQGjr/tx0nGuhiAGBRWNFOXpkChotA/CUYF4gKS0XO5QLwdYLN0hrCoNaIuvemBsGXbnbKw3z+o6R87+7tif5NJzP+YCMhhQa1Kb54JeC9KhQ5Rw2gHrRxBQAEZAKAjL9RIDjiGC7+nfOIGEgICaXQuP2A1pGAunzhlDhb4Y8fq1S5CVAJp8/tTs6KSzqRkCfO8BtVAx981vKnrcFa1L/KmjYtKwEi7m+ETU+TSPn7kwRGf5UCKHhb9HrcAJQQxuVf9Ppr00fni7QmIYzoaAwCgNQTmTHr9l9IyA16f7gOfHGY2G8ZfmerAiBfXhh7G6GOcpeM5mv6expGV3W5J/TdiOoRg+YcIlmYSdJMLYu+f7M5WluW3/+nz5d15NC+YiQKtL7Y3vTKjgUCEPNySWkVlmtmnIr+EzWCZqhyxGf/XXiEvumm1NwyALUsrG9QGweTxOXsafy1lghGcC0UZ8GWNmZvcEP3NC/X0/LyAn3bdln2jFmXEIqIgMzKLpAH1KFltKVFUdZ0tcXGKLQoJKRhGKTWxTg/jcxFhsiNuKMAB132HULLJqS5LeOvhliiLqQvu0CYKklpyiKLXmuBalfiaCFlMZZyaEzYFiKye9UoALQsoG1HRfpC9n8u9KWftiUeLojNK4b0Vi5EZZRW0G8Z8+aE0HI9TOIqAEhdu3u2IeekXNKTXEnCf7JY5UktLmyHiCotAJR54DkbjMw729C4GgAgHgnJDdky+8+hFYGW4RYOFPMwMRcRGllq+D825LwdvujHWRizFmjyaDs6Uwa/ucfQfwAQ5FXiQLHWyBDLNDyhpUIBWuaOvsdCtJHzZI3CxL6Q2sC5yjav0Tw+X0tr+nsaZrtirY9SHAY006WRjlTkmqbwhoTi5kJjIFlIq1P0NGG5d7yav4dR0PRo+8nYYggBRXYMUFGUuDcZVNL/Wrf9Hr8trdb7ZqFqo9DgbRq87uDbMvPiSIsz4DXWFCOLoHgsSOBfJS8paPJoTzjdIV6jahFF9iKqlI/B68LILFokLX5nhuKdYpRoLP5sGPiupAAoiznzqgi3y+kVFfcX8W2FVym1bzhCvRgYS0tRcZvHg5HFOI7F6RC2EtZEtCLP9hMOj9PpRfMDxWv+1lTj4ApD9dUkNTOb2I32xZBixZuBypklkWFlkcfub25zuZ0uD/okFHeST9F6wWVE2Lz37aVSHIuQiicDRqjW6kbghhIWpc5NrgvT7XR6gjE+q/hTTFpzSXW4Q9HZp/2cIcPwRcA8pJlUFbi1JCKg933VHk632+n0irBPr9QpLIuOQPtteCg3FT4TAg1Njd8DNktEaqJAlWvvjSJy7hi61QOtDZHWeNmd6gpWtMghIGGqsu/d8eWFjpISDWocN7fmBAWcQsjOkcpbkj7YrYedQkGKdHP8FPcV9z1fYYrJINu1AyCgI9oddB+NaRAgAMRBy0T1a3ckiA2+IAvIUt1eaYsrh51X8nCE1EppAERVmBdXB8oTRBIkMq6dhQT3CAJs/fGytvoqTthV/moYEoBAX68lfgh0SbRANIjIa6aAlkeWO7TMnbp6jKmlQAkA+PNEjWplO45dCHgpnQRwhLxmDtqWZCdULUfu1X3gwABQ9lut4BOLqYsBwPLLXC9qpbRSSgeAr58EhL9mOQbQKB+ol988RImtAS7FFahl+OWGjYa6xKvUQhqGNAxDUl2ZNJRpm01CV68XSB3aDBCjrasfDl5ypHZAiQTBKo13GdljN7jz1ZaGNHAx4fiWpKj4Ok06GFdOq2vjRJyd4BBHQE8L1LuZhDB8GKBxtfgFTAMjtCKpLU0mfDSuXn5J0DZoZvYVvSTFafC4gqMPB+SLIFD/crvTbXTLCbDvT+lhsJtYR0tbJDc/XPlvTDv4SkVixZiIYJcHAwPzBQPecuZrKz22LdoK0J1LaQzgI+Ujc5fcFAQYhgypWKdtp9ZRgA33+tUVmrY+gNsVVGljYKNGCNjFn4owvBiog6YYO7zyqDQyZUH7fLuO+9N9JM9/URUmfi76ixRvgceD7kqXJgWoeC46ODjiZABoUX82LOVuuzevqt1s9jCgdnpe5+nxyhK9fKrIB20rE+xyuZ71B+aNB7wsUlsDEI5nr0aCP7p7U2PXz7m3RRAg4Ri93M/VQmKe9pPax9kQjiIz05p3wuM2mgTaIhYwABZ/d7rs9VKuTFhF8vjS2ROG14vI61+VcvjvJHNVFyE656000BeigXeKwITF9SFOp0eOCbTRP3AKaOtGIwzvXZEEirmf9g79S+N4g4VcQ5/SFudAGhvzdk1YnYDHi8gRWHwdHqcbnwQqbQHn24Q27lA0Z2fKou2okjtuHLksNa+hIKrjk/N3daH+SkspJAaWpZqXL88hgK+oSECtNCh9g/oFfLJi1EiSO9tCr0QCxWUu2IByfToDwVtJ8hWgnaYmLT4CUS6RmtQcAIwt/GssTjPdTpexMOCAuhhLg/38BKFG09yipEDxWFnY0HjeaX4MeM7rXJ9aAdh3U5GKB4MF3qafpL8l8EyhLKT0iSo2t9vW/Ky+DgBoHVfb7g76oUj9YfWGgRkXSfUGpNxKS/F8OWA2/SQ1Bwo092mtVEwIUPhAneLd8DrdxhuBJwSKs7bZ4vvwBkWdKhw7imulxFTS7+c7kOYuqrwk75j8/N7HMLCGlsUnYRgHCkOD4jq30+U2m8YHPqpQnKS51GPaZwRfeKfwuIb4XesmTyptCjhAuwuARnPg1xyDgETPisTn0MaW90w1rk6hmXI1O90g9JAyvC6Ls2lxiXS7HFsLZSKL9wEP0iItfgCEnqKi4jYHjLwFCBafggiP1Zn1IcILm82mxdUhTqfb1jCjGLMixdp+L3XPfhmm9Vhm4fG6ALzMd3xEViYAgXrloTZAAxAc7BDJy8SoA6YxszACUGa87pOAdZ+zOE0sxaw27I8I9mJuYSrE4hjg3jwKfA5h20NFKj0CGJCHbs1uEG1HwY5nCpVRi/+Cx+mRnbKKM6xTzO33Fh9FqKNuTCEc4OcLAi0srWnxcyDoMBVp8T9A1Sxqkpb6CgKwYXyh150o7nc7XS6n/Ydi5SSLCYDS52rYwnBLbsEjWPwVwraPubT4vYSZr/632GBspaK2cplWDTYbRqnCWky1Tu9ouJ1uc1zxksLFvX9A8Tu7y4vpBZlI69y2wC0++nO5TAixnYrUzGoKvKN9FsmTD3tMYKIulEMs9Ti8To/RLqN4017FvkDB4hiEBofvLYgnxd0egRt2kXqVgG1Xvu55FBhCMmf54+UARMwtfBzN4kaHy+kKkfOLmdQuNgBax9cxQ836ZwuDYKEh4X31ALdKBB/UfqWUxZ9sqHFx9wv1AAB37Sl8HE1ZR9rY3U530IvFTcoX/woLxdXBIaHoqwueRHFeEIDgbmMMeBLz3zxbB/b6DgAwuywt4roirXknPCEeMaHYVZFruAlIGS9Mdou0yc8VTHtruem5VXmpB7ObL9ow49Kt46kKCoBn+NB2QRqSha2GkLOfzhHC517aWl//e2i0svoj1GX7rBBrYFF90rOQykBYx/ePssgtTRZnIMTldIW8W/yy1LXcxaRl7C07XH4953bLLPg34MDWjTsvxFu5AGAEhZer2aZ+leomNIvINCtj2VBKLdPHzir+3ZXXdJmUMg52Sg/2md91K/hAaikAlXIh60RmuHCIqDLReZ8pMrFqmb/fZAkavubflLmGqZxrqsFZnBfs9Doi1hUelly2PkZfcTrCz41l7W6nFy1PXEtd8xrvI7P4Nlxee+TOImJzrZWyLMuyrKvlp/xcX8HmCfEYrXZeU1nzGgHQFl+WzlCj4Y6S9RNoPzdEm54Qt6PMlmsbN73WK+204hPC7TUif2AJBtW14mcRdk+IJyj8+2scl0UJnv0MXF6H4wte87IJpTndFuQJ8Tgc19wZgpJg7znh8obIibxG5CnqN80Qt9NrVl5xzZxYgptBteIsYfe6MPLstczbK82YPg6Xy+lB+SXXLkkludpUa35Y1Qz1oOYCFvsEFvlpNFwulxM3bCjBuHiJ7mbViusrweO1Y4KveKvPlOah4YbD43S5nCOzSqLJSni5rJ97+8HpdaHrfAYuzEqR88rB5XK6nSFP+UqkiUt6O66i70mH6fFA9NtIBjKkqi1FrukmgjxOl0dU/DC3ZH1FJb7eV5E/1oIr1C0cd+3mVa8nVRbJ5Td54HE53SFovYMl7M0s+f3EWjH+XtPweJ1wj17pI4u+y01ZitS/DXchxONyuw3P46kl7mwsjQuWLXJxCzhCvSGwt50e/4f7pi9z6CxF8uCMYSacHpfLbpi3/FYKSxtL5ZJxQmTMeiPeEQSVpav0bdmrwl+TDgCFZJ6bfGLDmp/OGkGmEvBVcY2/w6FLPtReSrekKwP7Fyw+FmQXyM5FhUYVutWs5gq65B/SDh4/t2P1eQTZCehsWX9K+/BSuCK9FK951waOTv8pVgabgjk+iKCyzkqu6jUTTVtQ0rHM7EOnfYYKsoOCPm1vcvPt5aFkafSGi1LbWqZp4OiP32/PtJl2Qa392rrkrzaHpCTgzzYrDendPgQspeECUYpr1zQkfJuW/XA+GUF59z/kt6VQAKRmroXyLbsNrIpSwn5pA5A/y5eY/NOSAwka0jSkJCgIRR+kw1axeZtOTQDoUlxIIUp58R1JA8CpvVsOnUpM9WdKw/DbpcuoUaNBjSrVvAC1kKX5QFH6m/vyYYCVnHoxNsTmuOhBeUd5kUeh0j399QEg3wJcdlR9tbmn/yoA8s0b80tRAtdvDct1BOCfeUn8D4D/AfA/AP5Pv/4fWJZlYdHLsdEAAAAASUVORK5CYII=">
-      <span>London, UK</span>
+      <div class="foot-r"><a class="ib" href="https://github.com/TJNTV" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg></a><a class="ib" href="https://www.linkedin.com/in/tobias-nash/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg></a><button class="ib" type="button" aria-label="CV" title="CV"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg></button><span class="loc">London, UK</span></div>
     </div>
   </footer>
 
@@ -1211,7 +1231,7 @@
     desk.front(root);
     const shadow = $('.nbsh', root), persp = $('.nbp', root), scene = $('.nb3', root);
 
-    let w = 0, h = 0, T = 0, built = false, cover = null, coverFront = null, coverBack = null;
+    let w = 0, h = 0, T = 0, built = false, cover = null, coverFront = null, coverBack = null, pgsh = null;
     const c = { x: -9999, y: -9999 };
     let th = 0, vx = 0, vy = 0, wb = 0;              // the notebook as a whole: centre of the spine, angle, velocity, spin
     let phi = 0, om = 0, lift = 0, liftTarget = 0;                              // the cover: 0 = shut, PI = flat open on the left; angular velocity
@@ -1222,8 +1242,8 @@
       h = clamp(H * .56, 250, 470); w = h * ASPECT; T = Math.max(8, h * .028);
       const R = Math.round(clamp(w * .05, 12, 24));
       const tex = (u, extra) => `background-image:url('${u}');background-size:100% 100%;${extra || ''}`;
-      const edge = 'background:repeating-linear-gradient(90deg,#efe6c9 0 1px,#d6caa6 1px 2px);';
-      const edgeV = 'background:repeating-linear-gradient(0deg,#efe6c9 0 1px,#d6caa6 1px 2px);';
+      const edge = 'background:repeating-linear-gradient(90deg,#b9b095 0 1px,#9d9378 1px 2px);';
+      const edgeV = 'background:repeating-linear-gradient(0deg,#b9b095 0 1px,#9d9378 1px 2px);';
       scene.innerHTML =
         // back cover
         `<div class="nbf" style="left:0;top:${-h / 2}px;width:${w}px;height:${h}px;transform:translateZ(${-T / 2}px);border-radius:0 ${R}px ${R}px 0;${tex(COVER)}filter:brightness(.55)"></div>` +
@@ -1235,9 +1255,11 @@
         `<div class="nbf" style="left:0;top:${-h / 2}px;width:${T}px;height:${h}px;transform-origin:0 50%;transform:translateZ(${-T / 2}px) rotateY(-90deg);background:linear-gradient(90deg,#0e0e0e,#2a2a2a,#0e0e0e)"></div>` +
         // the first page (right-hand page of your spread)
         `<div class="nbf" style="left:0;top:${-h / 2}px;width:${w}px;height:${h}px;transform:translateZ(${T / 2 - 1}px);border-radius:0 ${R}px ${R}px 0;${tex(PGR)}"></div>` +
+        // the shadow the lifted cover throws on the first page
+        `<div class="nbf pgsh" style="left:0;top:${-h / 2}px;width:${w}px;height:${h}px;transform:translateZ(${T / 2 - .5}px);border-radius:0 ${R}px ${R}px 0"></div>` +
         // the cover, hinged on the spine
         `<div class="cv" style="top:${-h / 2}px;width:${w}px;height:${h}px"><div class="cvf cvfr" style="border-radius:0 ${R}px ${R}px 0;${tex(COVER)}"></div><div class="cvf cvb" style="border-radius:${R}px 0 0 ${R}px;${tex(PGL)}"></div></div>`;
-      cover = $('.cv', scene); coverFront = $('.cvfr', scene); coverBack = $('.cvb', scene);
+      cover = $('.cv', scene); coverFront = $('.cvfr', scene); coverBack = $('.cvb', scene); pgsh = $('.pgsh', scene);
       persp.style.perspectiveOrigin = `${w / 2}px 0px`; persp.style.transformOrigin = `${w / 2}px 0px`;
       shadow.style.top = `${-h / 2}px`; shadow.style.height = `${h}px`; shadow.style.borderRadius = `${R}px`;
       built = true;
@@ -1248,12 +1270,19 @@
     function render() {
       root.style.transform = `translate(${c.x.toFixed(1)}px,${c.y.toFixed(1)}px) rotate(${th.toFixed(4)}rad)`;
       if (!built) return;
-      const zc = T / 2 - T * (phi / Math.PI);
+      // The hinge stays level with the top of the pages until the cover has swung past vertical. (If it sank as it opened, the page
+      // would poke through the cover's spine edge and show up as a white line.) Only once the cover is lying over to the left does it settle onto the desk.
+      const zc = phi <= Math.PI / 2 ? T / 2 + .6 : (T / 2 + .6) - (T + .6) * ((phi - Math.PI / 2) / (Math.PI / 2));
       cover.style.transform = `translateZ(${zc.toFixed(2)}px) rotateY(${(-phi).toFixed(4)}rad)`;
       const s = Math.sin(phi);
       coverFront.style.setProperty('--b', (1 - .3 * s).toFixed(3));
       coverBack.style.setProperty('--b', (.8 + .2 * Math.abs(Math.cos(phi))).toFixed(3));
       const xf = w * Math.cos(phi), left = Math.min(0, xf);
+      // the lifted cover shades the page under it, so the page never shows up as a bright sliver at its edge
+      const zfree = zc + w * s;                                      // how high the cover's free edge is above the page
+      const xv = (xf - w / 2) * (1300 / Math.max(300, 1300 - zfree)) + w / 2;   // where that raised edge actually appears (perspective)
+      const sa = .86 * clamp(1 - phi / 1.3, 0, 1), sl = Math.max((w - xv) * 1.4, 60 + 200 * s);
+      pgsh.style.background = sa < .004 ? 'none' : `linear-gradient(90deg, rgba(0,0,0,${sa.toFixed(3)}) 0, rgba(0,0,0,${sa.toFixed(3)}) ${(xv + 4).toFixed(1)}px, rgba(0,0,0,0) ${(xv + sl).toFixed(1)}px)`;
       persp.style.scale = (1 + .045 * lift).toFixed(4);            // it rises towards you when you pick it up
       const ox = 10 + 12 * s + 14 * lift, oy = 14 + 16 * s + 20 * lift, cs = Math.cos(th), sn = Math.sin(th);
       const lx = ox * cs + oy * sn, ly = -ox * sn + oy * cs;      // keep the shadow falling down-right whatever the notebook's angle
@@ -1357,6 +1386,199 @@
     window.addEventListener('pointerup', end);
     window.addEventListener('pointercancel', end);
     window.addEventListener('blur', end);
+  })();
+
+  // a clear black ballpoint pen. Grab it anywhere to drag it about; grab the cap and pull along the pen and the cap comes off,
+  // after which the cap is its own loose object you can carry around.
+  (function () {
+    const desk = $('#view-desk'), lamp = desk && $('.lamp', desk);
+    if (!desk || !lamp) return;
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const R3 = Math.sqrt(3);
+    const prism = (x0, len, cls, r, only) => [0, 1, 2, 3, 4, 5].map(i => { const s = 2 * r / R3; return `<div class="sf ${cls}" data-i="${i}" style="left:${x0}px;top:${-s / 2}px;width:${len}px;height:${s}px;transform:rotateX(${i * 60}deg) translateZ(${r}px)"></div>`; }).join('');
+    const cone = (x0, rB, rT, T, cls) => {
+      const sB = 2 * rB / R3, sT = 2 * rT / R3, slant = Math.hypot(T, rB - rT), psi = Math.atan2(rB - rT, T) * 180 / Math.PI;
+      const hi = (50 + sT / (2 * sB) * 100).toFixed(1), lo = (50 - sT / (2 * sB) * 100).toFixed(1);
+      return [0, 1, 2, 3, 4, 5].map(i => `<div class="sf ${cls}" data-i="${i}" style="left:${x0}px;top:${-sB / 2}px;width:${slant}px;height:${sB}px;transform-origin:0 50%;transform:rotateX(${i * 60}deg) translate3d(0,0,${rB}px) rotateY(${psi}deg);clip-path:polygon(0 0,0 100%,100% ${hi}%,100% ${lo}%)"></div>`).join('');
+    };
+    const A = 4.6 * R3 / 2 * 1.9;                 // barrel apothem (about 7.6px)
+    // ---- the pen (coordinates are relative to the middle of the whole pen with its cap on: 300px long)
+    const PEN_L = 300, CAP_L = 75, CAP_CX = 112.5;
+    const barrel =
+      prism(-150, 262, 'pn-clear', A) +
+      // a thin clear ink tube with only a short column of ink left in it
+      `<div class="sf pn-tube" style="left:-134px;top:-1.6px;width:238px;height:3.2px"></div>` +
+      `<div class="sf pn-tube" style="left:-134px;top:-1.6px;width:238px;height:3.2px;transform:rotateX(90deg)"></div>` +
+      `<div class="sf pn-ink" style="left:34px;top:-1.6px;width:70px;height:3.2px"></div>` +
+      `<div class="sf pn-ink" style="left:34px;top:-1.6px;width:70px;height:3.2px;transform:rotateX(90deg)"></div>` +
+      prism(-156, 8, 'pn-tail', A + .8) +
+      cone(112, A, 5.4, 10, 'pn-clear') + cone(122, 5.4, 1.1, 17, 'pn-gold');       // the gold tip
+    const capFaces =
+      cone(-37.5, 10.2, 7.4, 71, 'pn-cap') + cone(33.5, 7.4, 6, 4, 'pn-cap') + prism(-38, 5, 'pn-band', 10.7) +
+      `<div class="sf pn-clip" data-i="2" style="left:-54px;top:-1.7px;width:52px;height:3.4px;transform:rotateX(120deg) translateZ(11.2px)"></div>` +
+      `<div class="sf pn-clip" data-i="2" style="left:-58px;top:-2.4px;width:7px;height:4.8px;transform:rotateX(120deg) translateZ(12.4px)"></div>`;
+
+    // ---- a loose stick: rigid body on the desk with a rolling 3D body
+    function stick(o) {
+      const root = document.createElement('div'); root.className = 'stk'; root.style.width = o.L + 'px'; root.style.transformOrigin = `${o.L / 2}px 20px`;
+      root.innerHTML = `<div class="s3d" style="left:${o.L / 2}px"></div>`;
+      const shadow = document.createElement('div'); shadow.className = 'sshadow'; shadow.style.width = o.L + 'px'; shadow.style.transformOrigin = `${o.L / 2}px 20px`; shadow.innerHTML = '<i></i>';
+      desk.insertBefore(shadow, lamp); desk.insertBefore(root, lamp);
+      root._shadow = shadow;
+      const s3d = $('.s3d', root);
+      const st = { root, shadow, s3d, c: { x: -999, y: -999 }, th: 0, vx: 0, vy: 0, w: 0, roll: 28, drag: null, lift: false, placed: false, running: false, last: 0 };
+      const I = o.I, K = 240, D = 24;
+      st.render = () => {
+        root.style.transform = `translate(${(st.c.x - o.L / 2).toFixed(1)}px,${(st.c.y - 20).toFixed(1)}px) rotate(${st.th.toFixed(4)}rad)`;
+        const off = st.drag ? [14, 20] : [7, 10];
+        shadow.style.transform = `translate(${(st.c.x - o.L / 2 + off[0]).toFixed(1)}px,${(st.c.y - 20 + off[1]).toFixed(1)}px) rotate(${st.th.toFixed(4)}rad)`;
+        shadow.firstChild.style.filter = st.drag ? 'blur(7px)' : 'blur(4px)';
+        s3d.style.transform = `rotateX(${st.roll.toFixed(2)}deg)`;
+        const ly = .5 * Math.sin(st.th) - .6 * Math.cos(st.th);
+        for (const f of $$('.sf[data-i]', root)) {
+          const phi = (+f.dataset.i * 60 + st.roll) * Math.PI / 180, dot = -Math.sin(phi) * ly + .65 * Math.cos(phi);
+          f.style.setProperty('--b', (.5 + .75 * clamp(dot / .88, 0, 1)).toFixed(2));
+        }
+      };
+      const hitWall = (nx, ny, pen, rx, ry) => {
+        st.c.x += nx * pen; st.c.y += ny * pen;
+        const vcx = st.vx - st.w * ry, vcy = st.vy + st.w * rx, vn = vcx * nx + vcy * ny;
+        if (vn < 0) { const rn = rx * ny - ry * nx, j = -1.2 * vn / (1 + rn * rn / I); st.vx += j * nx; st.vy += j * ny; st.w += (rx * j * ny - ry * j * nx) / I; }
+      };
+      st.collide = () => {
+        const W = desk.clientWidth, H = desk.clientHeight, cs = Math.cos(st.th), sn = Math.sin(st.th);
+        for (const [lx, ly, m] of o.pts()) {
+          const rx = lx * cs - ly * sn, ry = lx * sn + ly * cs, px = st.c.x + rx, py = st.c.y + ry;
+          if (px < m) hitWall(1, 0, m - px, rx, ry); else if (px > W - m) hitWall(-1, 0, px - (W - m), rx, ry);
+          if (py < m) hitWall(0, 1, m - py, rx, ry); else if (py > H - m) hitWall(0, -1, py - (H - m), rx, ry);
+        }
+      };
+      st.step = h => {
+        if (st.drag) {
+          const cs = Math.cos(st.th), sn = Math.sin(st.th), rx = st.drag.g.x * cs - st.drag.g.y * sn, ry = st.drag.g.x * sn + st.drag.g.y * cs;
+          const gvx = st.vx - st.w * ry, gvy = st.vy + st.w * rx;
+          const Fx = K * (st.drag.tx - (st.c.x + rx)) - D * gvx, Fy = K * (st.drag.ty - (st.c.y + ry)) - D * gvy;
+          st.vx += Fx * h; st.vy += Fy * h; st.w += (rx * Fy - ry * Fx) * h / I;
+        }
+        // grips the desk along its length, rolls freely sideways
+        const ca = Math.cos(st.th), sa = Math.sin(st.th);
+        let va = st.vx * ca + st.vy * sa, vp = -st.vx * sa + st.vy * ca;
+        va *= Math.pow(st.drag ? .97 : .92, h * 60); vp *= Math.pow(st.drag ? .992 : .982, h * 60);
+        st.vx = va * ca - vp * sa; st.vy = va * sa + vp * ca; st.w = clamp(st.w * Math.pow(st.drag ? .96 : .9, h * 60), -22, 22);
+        const sp = Math.hypot(st.vx, st.vy); if (sp > 2200) { st.vx *= 2200 / sp; st.vy *= 2200 / sp; }
+        const ox = st.c.x, oy = st.c.y;
+        st.c.x += st.vx * h; st.c.y += st.vy * h; st.th += st.w * h;
+        st.collide();
+        st.roll -= (-(st.c.x - ox) * Math.sin(st.th) + (st.c.y - oy) * Math.cos(st.th)) * 5.8;
+      };
+      st.run = () => { if (st.running) return; st.running = true; st.last = performance.now(); requestAnimationFrame(st.tick); };
+      st.tick = now => {
+        if (!st.running) return;
+        const dt = Math.min(.05, (now - st.last) / 1000); st.last = now;
+        const n = Math.max(1, Math.ceil(dt / (1 / 90)));
+        for (let i = 0; i < n; i++) st.step(dt / n);
+        st.render();
+        if (!st.drag && !st.pull && Math.hypot(st.vx, st.vy) < 4 && Math.abs(st.w) < .03) { st.running = false; return; }
+        requestAnimationFrame(st.tick);
+      };
+      st.toLocal = q => { const rx = q.x - st.c.x, ry = q.y - st.c.y, cs = Math.cos(st.th), sn = Math.sin(st.th); return { x: rx * cs + ry * sn, y: -rx * sn + ry * cs }; };
+      st.grab = (q, l) => { st.drag = { g: { x: clamp(l.x, -o.L / 2, o.L / 2), y: clamp(l.y, -14, 14) }, tx: q.x, ty: q.y }; root.classList.add('lifted'); st.run(); };
+      st.release = () => { st.drag = null; st.pull = null; root.classList.remove('lifted'); st.run(); };
+      window.addEventListener('pointermove', e => { if (st.drag) { const q = desk.local(e); st.drag.tx = q.x; st.drag.ty = q.y; } });
+      for (const ev of ['pointerup', 'pointercancel', 'blur']) window.addEventListener(ev, () => { if (st.drag || st.pull) st.release(); });
+      return st;
+    }
+
+    // ---- the pen
+    const pen = stick({ L: PEN_L, I: 6000, pts: () => [[-150, 0, 9], [150, 0, 9], [0, 0, 9]] });
+    pen.s3d.innerHTML = barrel + `<div class="capg" style="position:absolute;left:0;top:0;transform-style:preserve-3d;transform:translateX(${CAP_CX}px)">${capFaces}</div>`;
+    let capOn = true, cap = null, placed = false;
+    pen.root.id = 'pen';
+    const penHit = e => {
+      if (!placed) return false;
+      const l = pen.toLocal(desk.local(e));
+      return l.x >= -158 && l.x <= (capOn ? 152 : 138) && Math.abs(l.y) <= (capOn && l.x > 70 ? 15 : 13);
+    };
+    pen.root._api = {
+      covers: penHit,
+      canGrab: () => true,
+      begin: e => {
+        const q = desk.local(e), l = pen.toLocal(q);
+        if (capOn && l.x >= 70) { pen.pull = { x0: q.x, y0: q.y, l }; pen.run(); }      // pressing the cap: wait to see whether it's being pulled off
+        else pen.grab(q, l);
+      }
+    };
+    // putting the cap back on: bring its open end to the pen's tip, lined up with the pen, on its centre line, then let go
+    function tryRecap() {
+      if (!cap || capOn) return;
+      const ca = Math.cos(cap.th), sa = Math.sin(cap.th);
+      const dth = Math.atan2(Math.sin(cap.th - pen.th), Math.cos(cap.th - pen.th));
+      if (Math.abs(dth) > .34) return;                                           // pointing the same way as the pen (within about 20 degrees)
+      const l = pen.toLocal({ x: cap.c.x - ca * 37.5, y: cap.c.y - sa * 37.5 });   // the cap's open end, in the pen's own frame
+      if (l.x < 70 || l.x > 136 || Math.abs(l.y) > 9) return;                    // over the tip, and on the pen's centre line
+      const capg = $('.capg', cap.s3d);
+      capg.style.transform = `translateX(${CAP_CX}px)`;
+      pen.s3d.appendChild(capg);
+      desk._lifted = null; desk._order = desk._order.filter(x => x !== cap.root);
+      cap.running = false; cap.root.remove(); cap.shadow.remove();
+      cap = null; capOn = true;
+      pen.w *= .3; desk.front(pen.root); pen.render(); pen.run();
+    }
+    function popCap() {
+      capOn = false;
+      const capg = $('.capg', pen.s3d);
+      cap = stick({ L: 80, I: 700, pts: () => [[-38, 0, 8], [38, 0, 8]] });
+      cap.s3d.appendChild(capg); capg.style.transform = 'none';
+      cap.root.id = 'pencap';
+      const ca = Math.cos(pen.th), sa = Math.sin(pen.th);
+      cap.c.x = pen.c.x + CAP_CX * ca; cap.c.y = pen.c.y + CAP_CX * sa; cap.th = pen.th; cap.roll = pen.roll;
+      cap.vx = pen.vx + ca * 170; cap.vy = pen.vy + sa * 170; cap.w = (Math.random() - .5) * 3;
+      cap.root._api = {
+        covers: e => { const l = cap.toLocal(desk.local(e)); return Math.abs(l.x) <= 42 && Math.abs(l.y) <= 15; },
+        canGrab: () => true,
+        begin: e => { const q = desk.local(e); cap.grab(q, cap.toLocal(q)); }
+      };
+      const baseRelease = cap.release;
+      cap.release = () => { baseRelease(); tryRecap(); };            // letting go of the cap may put it back on
+      const baseStep = cap.step;
+      cap.step = h => {                                              // a little magnetism: held near the pen's tip, the cap eases round to line up with the pen
+        baseStep(h);
+        if (!cap || !cap.drag) return;
+        const ca = Math.cos(cap.th), sa = Math.sin(cap.th), l = pen.toLocal({ x: cap.c.x - ca * 37.5, y: cap.c.y - sa * 37.5 });
+        if (l.x > 60 && l.x < 200 && Math.abs(l.y) < 34) {
+          const dth = Math.atan2(Math.sin(cap.th - pen.th), Math.cos(cap.th - pen.th));
+          if (Math.abs(dth) < 1) { cap.th -= dth * Math.min(1, 7 * h); cap.w *= .9; }
+        }
+      };
+      desk._lifted = cap.root; desk.front(cap.root);
+      cap.render(); cap.run();
+      return cap;
+    }
+    // while the cap is pressed: pull along the pen = cap comes off; anything else = drag the pen
+    window.addEventListener('pointermove', e => {
+      if (!pen.pull) return;
+      const q = desk.local(e), dx = q.x - pen.pull.x0, dy = q.y - pen.pull.y0, dist = Math.hypot(dx, dy);
+      if (dist < 24) return;
+      const along = dx * Math.cos(pen.th) + dy * Math.sin(pen.th);
+      const l0 = pen.pull.l; pen.pull = null;
+      if (along > .6 * dist) {                                 // pulled away from the pen: pop!
+        const c2 = popCap(); c2.grab(q, c2.toLocal(q)); c2.drag.tx = q.x; c2.drag.ty = q.y;
+        pen.root.classList.remove('lifted');
+      } else { pen.grab(q, l0); }
+    });
+
+    // ---- appears somewhere on the right-hand side of the desk
+    window.addEventListener('desk-open', () => {
+      if (placed) return;
+      const W = desk.clientWidth, H = desk.clientHeight;
+      if (!W) return;
+      placed = true;
+      pen.c.x = clamp(W * (.66 + Math.random() * .2), 200, Math.max(200, W - 200)); pen.c.y = clamp(H * (.5 + Math.random() * .3), 80, Math.max(80, H - 80));
+      pen.th = (Math.random() - .5) * .9 + (Math.random() < .5 ? 0 : Math.PI);
+      pen.collide(); pen.render();
+    });
+    window.addEventListener('resize', () => { if (placed) { pen.collide(); pen.render(); if (cap) { cap.collide(); cap.render(); } } });
+    desk.front(pen.root);
   })();
 
   // copy email
