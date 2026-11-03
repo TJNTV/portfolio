@@ -80,5 +80,5 @@ portfolio/
 ---
 
 <p align="center">
-  **Thanks for checking out my portfolio!** ⭐
+  Thanks for checking out my portfolio! ⭐
 </p>
