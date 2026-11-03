@@ -1,10 +1,8 @@
 # 👨‍💻 Toby Nash — Portfolio
 
-<p align="center">
-  **My personal portfolio website, showcasing my projects, interests and development journey.**
-</p>
-
 <img width="1767" height="893" alt="Screenshot 2026-11-03 at 14 00 19" src="https://github.com/user-attachments/assets/8ed876a8-f545-414e-b97a-3b54a4bec0e7" />
+
+&nbsp;
 
 <p align="center">
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
@@ -12,7 +10,9 @@
   <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
 </p>
 
----
+<p align="center">
+  My personal portfolio website, showcasing my projects, interests and development journey.
+</p>
 
 ## 📖 About
 
