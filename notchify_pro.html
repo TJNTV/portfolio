@@ -335,15 +335,8 @@
   .np-cta { margin-top: 30px; }
   .btn .apple { width: 18px; height: 18px; fill: currentColor; stroke: none; margin-top: -2px; }
   .btn:hover .apple { transform: none; }
-  .dl-wrap { display: inline-block; cursor: default; }
-  .dl-wrap .btn:disabled { pointer-events: none; }
   .btn:disabled { font-family: inherit; cursor: default; background: var(--bg2); color: var(--muted); border-color: var(--line); box-shadow: none; transition: background-color .7s, color .7s; }
   .btn:disabled:hover { transform: none; box-shadow: none; }
-  .dl-txt { display: inline-grid; }
-  .dl-txt > span { grid-area: 1 / 1; text-align: left; transition: opacity .3s ease; }
-  .lbl-soon { opacity: 0; }
-  .dl-wrap:hover .lbl, .dl-wrap.show .lbl { opacity: 0; }
-  .dl-wrap:hover .lbl-soon, .dl-wrap.show .lbl-soon { opacity: 1; }
   @media (max-width: 860px) { .np { grid-template-columns: 1fr; gap: 36px; } .np-back { margin-bottom: 24px; } }
 </style>
 </head>
@@ -391,10 +384,8 @@
           <p class="np-lede after" style="--a:-2">Notchify is an app that gives a normal Mac a Dynamic Island that works with Spotify.</p>
           <p class="np-more after" style="--a:-1">It lives in the notch and shows what’s playing: the album art and an equaliser at rest, the song title when you hover, and full controls with a progress bar when you click.</p>
           <div class="np-cta after" style="--a:0">
-            <!-- not available yet: when the download is ready, swap the wrapper and button below for <a class="btn" href="..."><svg class="apple" ...></svg>Download for Mac for free</a> -->
-            <span class="dl-wrap" id="dlWrap">
-              <button class="btn" type="button" disabled aria-label="Download for Mac for free, coming soon"><svg class="apple" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span class="dl-txt" aria-hidden="true"><span class="lbl">Download for Mac for free</span><span class="lbl-soon">Mac download coming soon</span></span></button>
-            </span>
+            <!-- not available yet: when the download is ready, replace this button with <a class="btn" href="..."><svg class="apple" ...></svg>Download for Mac for free</a> -->
+            <button class="btn" type="button" disabled><svg class="apple" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>Mac download coming soon</button>
           </div>
         </div>
       </div>
@@ -493,12 +484,6 @@
       });
     }
     thumbs.forEach((t, i) => t.addEventListener('click', () => pick(i)));
-  })();
-
-  // download button: not available yet. On a touch screen there is no hover, so a tap shows the "coming soon" message for a moment
-  (() => {
-    const w = $('#dlWrap'); if (!w) return; let t = 0;
-    w.addEventListener('click', () => { w.classList.add('show'); clearTimeout(t); t = setTimeout(() => w.classList.remove('show'), 2200); });
   })();
 
   // reveal on scroll
